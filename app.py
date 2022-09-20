@@ -140,18 +140,24 @@ def posting():
     username_receive = request.form['username_give']
     username1_receive = request.form['username1_give']
     title_receive = request.form['title_give']
-    picture_receive = request.form['picture_give']
-    fitness_receive = request.form['fitness_give']
+    datepicker_receive = request.form['datepicker_give']
     time_receive = request.form['time_give']
-    description_receive = request.form['description_give']
+    kind_receive = request.form['kind_give']
+    comment_receive = request.form['comment_give']
+
+    file = request.files["file_give"]
+
+    save_to = f'static/{username_receive}_{title_receive}.png'
+    file.save(save_to)
+
     doc = {
         "username": username_receive,
         "username1": username1_receive,
         "title": title_receive,
-        "picture": picture_receive,
-        "fitness": fitness_receive,
+        "datepicker": datepicker_receive,
         "time": time_receive,
-        "description": description_receive
+        "kind": kind_receive,
+        "comment": comment_receive
     }
     db.posts.insert_one(doc)
     return jsonify({'result': 'success'})

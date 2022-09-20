@@ -46,3 +46,9 @@ input::-webkit-calendar-picker-indicator {
             width: 95%;
             max-width: 1200px;
 }
+
+.navbar-brand {
+    flex: 1;
+    justify-content: space-between;
+    flex-direction: row;
+}

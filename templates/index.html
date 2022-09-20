@@ -28,6 +28,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('preview').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                document.getElementById('preview').src = "";
+            }
+        }
+    </script>
+
+    <script>
         $(document).ready(function () {
             listing();
         });
@@ -41,13 +55,13 @@
                     let rows = response['posts']
                     for (let i = 0; i < rows.length; i++) {
                         let title = rows[i]['title']
-                        let picture = rows[i]['picture']
+                        let id = rows[i]['username']
                         let name = rows[i]['username1']
 
 
                         let temp_html = `<a href="/post/${name}/${title}" class="col">
                                             <div class="card h-100">
-                                                <div class="card-img-top">${picture}</div>
+                                                <img src= "static/${id}_${title}.png" alt="사진"/>
                                                 <div class="card-body">
                                                     <h5 class="card-title">${title}</h5>
                                                     <p class="card-text">${name}</p>
