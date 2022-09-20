@@ -103,10 +103,14 @@
 
         function sign_up() {
             let username = $("#input-username").val()
+            let username1 = $("#input-username1").val()
             let password = $("#input-password").val()
             let password2 = $("#input-password2").val()
-            console.log(username, password, password2)
 
+            if (username1 == "") {
+                alert("아이디를 다시 확인해주세요.")
+                return;
+            }
 
             if ($("#help-id").hasClass("is-danger")) {
                 alert("아이디를 다시 확인해주세요.")
@@ -143,6 +147,7 @@
                 url: "/sign_up/save",
                 data: {
                     username_give: username,
+                    username1_give: username1,
                     password_give: password
                 },
                 success: function (response) {
@@ -155,6 +160,7 @@
 
         function toggle_sign_up() {
             $("#sign-up-box").toggleClass("is-hidden")
+            $("#sign-up-id").toggleClass("is-hidden")
             $("#div-sign-in-or-up").toggleClass("is-hidden")
             $("#btn-check-dup").toggleClass("is-hidden")
             $("#help-id").toggleClass("is-hidden")
@@ -222,6 +228,12 @@
             <article class="media">
                 <div class="media-content">
                     <div class="content">
+                        <div class="field has-addons">
+                            <div id="sign-up-id" class="control has-icons-left is-hidden" style="width:100%">
+                                <input id="input-username1" class="input" type="text" placeholder="이름">
+                                <span class="icon is-small is-left"><i class="fa fa-user"></i></span>
+                            </div>
+                        </div>
                         <div class="field has-addons">
                             <div class="control has-icons-left" style="width:100%">
                                 <input id="input-username" class="input" type="text" placeholder="아이디">
