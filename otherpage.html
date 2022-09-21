@@ -10,6 +10,7 @@
             crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
+
     <!-- Webpage Title -->
     <title>오늘의 운동</title>
 
@@ -117,156 +118,104 @@
             margin-left: 918px;
         }
 
-        .card {
-            width: 1000px;
-            height: 90px;
-            margin-top: 30px;
+      .card {
+        width: 1000px;
+          height: 90px;
+          margin-top: 30px;
 
-        }
+    }
+      .mypost {
+          margin-top: 10px;
+      }
+      .mypost .buttons {
+          margin-top: 8px;
+          margin-left: 905px;
+      }
 
-        .mypost {
-            margin-top: 10px;
-        }
-
-        .mypost .buttons {
-            margin-top: 8px;
-            margin-left: 905px;
-        }
-
-        .bottonline {
-            margin-top: 20px;
-        }
+      .bottonline {
+          margin-top: 20px;
+      }
 
 
     </STYLE>
     <script>
         $(document).ready(function () {
-            gettitle();
+            find_post();
+            look_feedback()
+
         });
 
-        function gettitle() {
+        function find_post() {
             $.ajax({
                 type: 'GET',
                 url: '/posting/save',
                 data: {},
                 success: function (response) {
                     let rows = response['posts']
-                    for (let i = 0; i < rows.length; i++) {
-                        let title = rows[i]['title']
+
+                        let title = rows['title']
+                        let kind = rows['kind']
+                        let name = rows['username1']
+                        let comment = rows['comment']
+                        let time = rows['time']
+
+
                         let temp_html = `<div class="board_title">
                                                  <strong>${title}</strong>
-                                            </div>`
-                        $('#board_titleid').append(temp_html)}
+                                            </div>
+                                            <p >${name}</p>
+                                            <p >${kind}</p>
+                                            <p>${comment}</p>
+                                            <p>${time}</p>`
+                        $('#board_titleid').append(temp_html)
                     }
-                }
-            })
+                })
+            });
         }
     </script>
 
-    <script>
-        $(document).ready(function () {
-            getcomment();
-        });
-
-        function getcomment() {
-            $.ajax({
-                type: 'GET',
-                url: '/posting/save',
-                data: {},
-                success: function (response) {
-                    let rows = response['posts']
-                    for (let i = 0; i < rows.length; i++) {
-                        let date = rows[i]['datepicker']
-                        let kind = rows[i]['kind']
-                        let time = rows[i]['time']
-                        let comment = rows[i]['comment']
-                        let temp_html = `
-                                         <div class="date">${date}</div>
-                                         <div class="kind">${kind}</div>
-                                         <div class="time">${time}</div>
-                                         <div class="comment">${comment}</div>
-                                         `
-                        $('#writing_boxid').append(temp_html)}
-                    }
-                }
-            })
-        }
-    </script>
 
     <script>
-        function getimage() {
-            $.ajax({
-                type: 'GET',
-                url: '/posting/save',
-                data: {},
-                success: function (response) {
-                    let rows = response['posts']
-                    for (let i = 0; i < rows.length; i++) {
-                        {#let file = rows[i]['file']#}
-                        let temp_html = `<div class="image_box">
-                                         <img src= "static/${id}_${title}.png" alt="사진"/>
-                                         </div>`
-                        $('#image_boxid').append(temp_html)
-                    }
-                }
-            })
-        }
-    </script>
-    <script>
-        $(document).ready(function () {
-            show_feedback()
-        });
-    </script>
-
-    <script>
-        function save_feedback() {
-            let feedback_name = $('#feedback_name').val()
-            let feedback = $('#feedback').val()
-
+          function get_feedback() {
+              let url = window.location.href.split("/")[4]
+              let feedback = $('#input_feedback').val()
             $.ajax({
                 type: "POST",
-                url: "/feedback",
-                data: {feedback_give: feedback, feedback_name_give: feedback_name},
+                url: "/posting/10/feedback_save",
+                data: {feedback_give: feedback, num_give : url},
                 success: function (response) {
                     alert(response["msg"])
                     window.location.reload()
                 }
             });
-        }
-    </script>
+          }
+          </script>
 
     <script>
-    function show_feedback() {
-        $('#feedback_list').empty()
-        $.ajax({
-            type: "GET",
-            url: "/feedback",
-            data: {},
-            success: function (response) {
-                let rows = response['feedbacks']
-                for (let i = 0; i < rows.length; i++) {
-                    let feedback = rows[i]['feedback']
-                    let feedback_name = rows[i]['feedback_name']
+                function look_feedback() {
+                    $.ajax({
+                        type: "GET",
+                        url: "/posting/10/feedback_save",
+                        data: {},
+                        success: function (response) {
+                            let rows = response['feedbacks']
 
-                    let temp_html = ` <div class="card">
-                                            <div class="card-body">
-                                                    <blockquote class="blockquote mb-0">
-                                                        <p>${feedback}</p></blockquote>
-                                                    <div class="bottonline">
-                                                        <footer class="blockquote-footer">${feedback_name}</footer>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>`
-                    $('#feedback_list').append(temp_html)
+                            for (let i = 0; i < rows.length; i++) {
+                                let name = rows[i]['name']
+                                let feedback = rows[i]['feedback']
+                                let num = rows[i]['num']
+
+                                let temp_html = ``
+
+                                if (num == window.location.href.split("/")[4]) {
+                                    temp_html = `<text>${name}: ${feedback}<text><br>`
+                                }
+                                $('#input_feedbacks').append(temp_html)
+                            }
+                        }
+                    });
                 }
-            }
-        });
-    }
-</script>
-
-
-
+    </script>
 </head>
 <body>
 <!-- Main container -->
@@ -293,7 +242,7 @@
     <!-- Right side -->
     <div class="level-right">
         <p class="level-item"><a>글쓰기</a></p>
-        <p class="level-item"><a class="button is-link is-light">Logout</a></p>
+        <p class="level-item"><a class="button is-link is-light">HOME</a></p>
     </div>
 </nav>
 <div class="board_wrap">
@@ -306,24 +255,22 @@
 
 
             <div class="mypost">
-                <div class="form-floating mb-3">
-                    <input type="text" class="form-control" id="feedback_name" placeholder="name@example.com">
-                    <label for="feedback_name">이름</label>
-                </div>
                 <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="feedback"
+                    <textarea class="form-control" placeholder="Leave a comment here" id="input_feedback"
                               style="height: 100px"></textarea>
                     <label for="feedback">댓글을 남겨주세요.</label>
                 </div>
                 <div class="buttons">
-                    <button onclick="save_feedback()" type="button" class="btn btn-outline-secondary">댓글 남기기</button>
+                    <button onclick="get_feedback()" type="button" class="btn btn-outline-secondary">댓글 남기기</button>
                 </div>
             </div>
 
-            <div class="mycards" id="feedback_list">
+            <div id="input_feedbacks">
             </div>
         </div>
     </div>
 </div>
 </body>
 </html>
+
+
