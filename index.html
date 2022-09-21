@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <!-- Webpage Title -->
+    <title>Log In | SWEETER</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Font Awesome CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+
+    <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('preview').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                document.getElementById('preview').src = "";
+            }
+        }
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            listing();
+        });
+
+        function listing() {
+            $.ajax({
+                type: 'GET',
+                url: '/posting/save',
+                data: {},
+                success: function (response) {
+                    let rows = response['posts']
+                    for (let i = 0; i < rows.length; i++) {
+                        let title = rows[i]['title']
+                        let id = rows[i]['username']
+                        let name = rows[i]['username1']
+
+
+                        let temp_html = `<a href="/post/${name}/${title}" class="col">
+                                            <div class="card h-100">
+                                                <img src= "static/${id}_${title}.png" alt="사진"/>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${title}</h5>
+                                                    <p class="card-text">${name}</p>
+                                                </div>
+                                            </div>
+                                        </a>`
+
+                        $('#post-card').append(temp_html)
+                    }
+                }
+            })
+        }
+
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/login"
+        }
+
+    </script>
+
+</head>
+<body>
+<nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <img src="{{ url_for('static', filename='logo.png') }}">
+            <strong class="is-sparta"
+                    style="font-family: 'Stylish', sans-serif;font-size: larger;">SWEETER</strong>
+        </a>
+        <button onclick="sign_out()">로그아웃</button>
+    </div>
+</nav>
+<section class="section">
+    <div id="post-box" class="container">
+        <div class="box">
+            <article class="media">
+                <div class="media-left">
+                    <a class="image is-64x64" href="#">
+                        <img class="is-rounded"
+                             src={{ url_for("static", filename="profile_pics/profile_placeholder.png") }} alt="Image">
+                    </a>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <p>
+                            <strong>이름 : {{ user_info.username1 }}</strong> <small>아이디 : {{ user_info.username }}</small>
+
+                            <br>
+                            이름과 아이디
+                        </p>
+                    </div>
+                    <button onclick="window.location.href='/posting/{{ user_info.username }}'">
+                        글쓰기
+                    </button>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+<div class="post-box">
+    <div class="row row-cols-1 row-cols-md-4 g-4" id="post-card"/>
+</div>
+<div id="user-box"></div>
+
+</body>
+</html>
