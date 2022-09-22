@@ -42,10 +42,8 @@
         }
 
         .board_wrap {
-            width: 500px;
-            height: 500px;
-            margin: 100px auto;
-            background-color: green;
+            width: 800px;
+            margin: auto;
         }
 
         .board_title strong {
@@ -118,12 +116,11 @@
         }
 
         .mypost {
-            margin-top: 40px;
+            margin: 40px auto auto auto;
         }
 
-        .mypost .buttons {
-            margin-top: 8px;
-            margin-left: 905px;
+        .mypost > button {
+            margin-left: auto;
         }
 
         .bottonline {
@@ -166,8 +163,7 @@
                         let temp_html = ``
 
                         if (num == window.location.href.split("/")[4]) {
-                            temp_html = `<a id="main-card" href="/post/${num}" class="col">
-                                            <div class="card h-100">
+                            temp_html = `<div class="card h-100">
                                                 <img src= "../static/${num}.png" alt="사진"/>
                                                 <div class="card-body">
                                                     <h5>${title}</h5>
@@ -175,8 +171,7 @@
                                                     <p class="card-text">${datepicker}</p>
                                                     <p class="card-text">${comment}</p>
                                                 </div>
-                                            </div>
-                                        </a>`
+                                            </div>`
                         }
                         $('#post-card').append(temp_html)
                     }
@@ -228,8 +223,9 @@
             });
         }
 
-            {#로그아웃#}
-                function sign_out() {
+        {#로그아웃#}
+
+        function sign_out() {
             $.removeCookie('mytoken', {path: '/'});
             alert('로그아웃!')
             window.location.href = "/login"
@@ -243,43 +239,40 @@
 <nav class="level">
     <!-- Left side -->
     <div class="level-left">
-
-          <p class="level-item"><a href="javascript:history.go(-1);">HOME</a></p>
+        <p class="level-item"><a href="javascript:history.go(-1);">HOME</a></p>
     </div>
     <!-- Right side -->
     <div class="level-right">
-        <p class="level-item"><button class="button is-link is-light" onclick="window.location.href='/posting/{{ user_info.username }}'">글쓰기</button></p>
-        <p class="level-item"><button class="button is-link" onclick="sign_out()">로그아웃</button></p>
+        <p class="level-item">
+            <button class="button is-link is-light" onclick="window.location.href='/posting/{{ user_info.username }}'">
+                글쓰기
+            </button>
+        </p>
+        <p class="level-item">
+            <button class="button is-link" onclick="sign_out()">로그아웃</button>
+        </p>
     </div>
 </nav>
 
 <div class="board_wrap">
+
+    {#posting 정보 불러오기#}
     <div class="post-box">
-        {#        posting 정보 불러오기#}
         <div class="row row-cols-1 row-cols-md-4 g-4" id="post-card"/>
     </div>
-    </div>
-</div>
-    {#        댓글 입력#}
 
+    {#댓글 입력#}
     <div class="mypost">
         <div class="form-floating">
-                    <textarea class="form-control" placeholder="Leave a comment here" id="input_feedback"
-                              style="height: 100px"></textarea>
+            <textarea class="form-control" placeholder="Leave a comment here" id="input_feedback"></textarea>
             <label for="feedback">댓글을 남겨주세요.</label>
         </div>
-        <div class="buttons">
-            <button onclick="get_feedback()" type="button" class="btn btn-outline-secondary">댓글 남기기</button>
-        </div>
+        <button onclick="get_feedback()" type="button" class="btn btn-outline-secondary">댓글 남기기</button>
     </div>
 
-
     {#  댓글 붙이는 카드#}
-<div id="input_feedbacks">
+    <div id="input_feedbacks">
+    </div>
 </div>
-
-
-
 </body>
-
 </html>
