@@ -10,7 +10,7 @@
             crossorigin="anonymous"></script>
 
     <!-- Webpage Title -->
-    <title>Log In | SWEETER</title>
+    <title>오늘의 운동</title>
 
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -21,12 +21,25 @@
     <!-- Font Awesome CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .level-left {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+    </style>
+
+    {#    사진 미리보기#}
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -45,87 +58,115 @@
         $(document).ready(function () {
             listing();
         });
+        {#db에서 포스팅 정보 가져오기 및 출력 준비#}
 
         function listing() {
+            let search = $('#input_search').val()
             $.ajax({
                 type: 'GET',
                 url: '/posting/save',
                 data: {},
                 success: function (response) {
                     let rows = response['posts']
+                    $('#post-card').empty()
                     for (let i = 0; i < rows.length; i++) {
                         let title = rows[i]['title']
-                        let id = rows[i]['username']
                         let name = rows[i]['username1']
+                        let num = rows[i]['num']
 
+                        let temp_html = ``
 
-                        let temp_html = `<a href="/post/${name}/${title}" class="col">
+                        if (search == 0) {
+                            temp_html = `<a id="main-card" href="/post/${num}" class="col">
                                             <div class="card h-100">
-                                                <img src= "static/${id}_${title}.png" alt="사진"/>
+                                                <img src= "static/${num}.png" alt="사진"/>
                                                 <div class="card-body">
                                                     <h5 class="card-title">${title}</h5>
                                                     <p class="card-text">${name}</p>
                                                 </div>
                                             </div>
                                         </a>`
-
+                        } else if (search == name) {
+                            temp_html = `<a id="main-card" href="/post/${num}" class="col">
+                                            <div class="card h-100">
+                                                <img src= "static/${num}.png" alt="사진"/>
+                                                <div class="card-body">
+                                                    <h5 class="card-title">${title}</h5>
+                                                    <p class="card-text">${name}</p>
+                                                </div>
+                                            </div>
+                                        </a>`
+                        }
                         $('#post-card').append(temp_html)
                     }
+                    search = 0
                 }
             })
         }
+    </script>
+
+    <script>
+        {#        로그아웃#}
 
         function sign_out() {
             $.removeCookie('mytoken', {path: '/'});
             alert('로그아웃!')
             window.location.href = "/login"
         }
-
     </script>
-
 </head>
-<body>
-<nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img src="{{ url_for('static', filename='logo.png') }}">
-            <strong class="is-sparta"
-                    style="font-family: 'Stylish', sans-serif;font-size: larger;">SWEETER</strong>
-        </a>
-        <button onclick="sign_out()">로그아웃</button>
-    </div>
-</nav>
-<section class="section">
-    <div id="post-box" class="container">
-        <div class="box">
-            <article class="media">
-                <div class="media-left">
-                    <a class="image is-64x64" href="#">
-                        <img class="is-rounded"
-                             src={{ url_for("static", filename="profile_pics/profile_placeholder.png") }} alt="Image">
-                    </a>
-                </div>
-                <div class="media-content">
-                    <div class="content">
-                        <p>
-                            <strong>이름 : {{ user_info.username1 }}</strong> <small>아이디 : {{ user_info.username }}</small>
 
-                            <br>
-                            이름과 아이디
-                        </p>
-                    </div>
-                    <button onclick="window.location.href='/posting/{{ user_info.username }}'">
-                        글쓰기
-                    </button>
-                </div>
-            </article>
+<body>
+<div>{# style="overflow-x:hidden;">
+
+        네비게이션 바 {#    검색/초기화/로그아웃/글 작성/#}
+
+    <!-- Main container -->
+
+    <nav class="level">
+        <!-- Left side -->
+        <div class="level-left">
+            <div class="level-item">
+                <p class="subtitle is-5">
+                    <strong>오늘의 운동</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Right side -->
+        <div class="level-right">
+            <p class="level-item">
+                <button class="btn btn-light" onclick="sign_out()">로그아웃</button>
+            </p>
+            <p class="level-item">
+                <button class="button is-link is-light"
+                        onclick="window.location.href='/posting/{{ user_info.username }}'">글 작성
+                </button>
+            </p>
+        </div>
+    </nav>
+    <div class="level-item">
+        <div class="field has-addons">
+            <p class="control">
+                <input class="input" type="text" placeholder="Find a person">
+            </p>
+            <p class="control">
+                <button class="button" onclick="listing()">
+                    검색
+                </button>
+                <button class="button" onclick="window.location.reload()">
+                    초기화
+                </button>
+            </p>
         </div>
     </div>
-</section>
-<div class="post-box">
-    <div class="row row-cols-1 row-cols-md-4 g-4" id="post-card"/>
-</div>
-<div id="user-box"></div>
 
+    {#    포스팅정보 불러오기#}
+    <div class="post-box">
+        <div class="row row-cols-1 row-cols-md-4 g-4" id="post-card"/>
+    </div>
+    <div id="user-box"></div>
+</div>
 </body>
+
 </html>
