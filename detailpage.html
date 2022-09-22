@@ -108,11 +108,10 @@
             margin-left: 918px;
         }
 
-        .card {
+        .card1 {
             width: 1000px;
             height: 90px;
             margin-top: 30px;
-
         }
 
         .mypost {
@@ -120,7 +119,8 @@
         }
 
         .mypost > button {
-            margin-left: auto;
+            float: right;
+            margin-bottom: 20px;
         }
 
         .bottonline {
@@ -131,12 +131,6 @@
             margin-top: 20px;
             margin-bottom: 20px;
         }
-
-        #post-card {
-            width: 1000px;
-            padding-top: 10px;
-        }
-
 
     </style>
     <script>
@@ -164,10 +158,10 @@
                         let temp_html = ``
 
                         if (num == window.location.href.split("/")[4]) {
-                            temp_html = `<div class="card h-100">
+                            temp_html = `<div class="card1 h-100">
                                                 <img src= "../static/${num}.png" alt="사진"/>
                                                 <div class="card-body">
-                                                    <h5>${title}</h5>
+                                                    <h5><strong>${title}<strong></h5>
                                                     <p class="card-text">${name}</p>
                                                     <p class="card-text">${datepicker}</p>
                                                     <p class="card-text">${comment}</p>
@@ -199,7 +193,9 @@
                         let temp_html = ''
 
                         if (num == window.location.href.split("/")[4]) {
-                            temp_html = `<text>${name}: ${feedback}</text><br/>`
+                            temp_html = `<div class="card">
+                                           <text>${name}: ${feedback}</text>
+                                              </div>`
                         }
                         $('#input_feedbacks').append(temp_html)
                     }
@@ -272,10 +268,8 @@
     </div>
 
     {#  댓글 붙이는 카드#}
-<div class="card">
-  <div class="card-body" id="input_feedbacks">
+  <div class="feedback_dd" id="input_feedbacks">
   </div>
-</div>
 </div>
 </body>
 </html>
