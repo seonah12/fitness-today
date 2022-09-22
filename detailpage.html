@@ -44,6 +44,7 @@
         .board_wrap {
             width: 800px;
             margin: auto;
+            max-width: 100%;
         }
 
         .board_title strong {
@@ -131,6 +132,12 @@
             margin-top: 20px;
             margin-bottom: 20px;
         }
+          .card {
+            width: 1000px;
+            height: 90px;
+            margin-top: 30px;
+
+        }
 
     </style>
     <script>
@@ -193,9 +200,8 @@
                         let temp_html = ''
 
                         if (num == window.location.href.split("/")[4]) {
-                            temp_html = `<div class="card">
-                                           <text>${name}: ${feedback}</text>
-                                              </div>`
+                            temp_html = `
+                                           <text>${name}: ${feedback}</text></br>`
                         }
                         $('#input_feedbacks').append(temp_html)
                     }
@@ -268,8 +274,10 @@
     </div>
 
     {#  댓글 붙이는 카드#}
-  <div class="feedback_dd" id="input_feedbacks">
-  </div>
+    <div class="card">
+    <div id="input_feedbacks">
+    </div>
+        </div>
 </div>
 </body>
 </html>
