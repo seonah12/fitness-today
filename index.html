@@ -32,7 +32,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <style>
-                .level-left {
+
+
+        .level-left {
             margin-left: 30px;
             margin-top: 10px;
         }
@@ -41,11 +43,12 @@
             margin-right: 15px;
             margin-top: 10px;
         }
+
         body {
-    background-color: lightsteelblue;
-    min-height: 100vh;
-		padding-top: 3.25rem;
-}
+            background-color: lightsteelblue;
+            min-height: 100vh;
+            padding-top: 3.25rem;
+        }
     </style>
 
     {#    사진 미리보기#}
@@ -88,7 +91,7 @@
                         if (search == 0) {
                             temp_html = `<a id="main-card" href="/post/${num}" class="col">
                                             <div class="card h-100">
-                                                <img src= "static/${num}.png" alt="사진"/>
+                                               <img class="image_size" src= "static/${num}.png" alt="사진"/>
                                                 <div class="card-body">
                                                     <h5 class="card-title">${title}</h5>
                                                     <p class="card-text">${name}</p>
@@ -98,7 +101,7 @@
                         } else if (search == name) {
                             temp_html = `<a id="main-card" href="/post/${num}" class="col">
                                             <div class="card h-100">
-                                                <img src= "static/${num}.png" alt="사진"/>
+                                                <img class="image_size" src= "static/${num}.png" alt="사진"/>
                                                 <div class="card-body">
                                                     <h5 class="card-title">${title}</h5>
                                                     <p class="card-text">${name}</p>
@@ -128,45 +131,51 @@
 <body>
 <div style="overflow-x:hidden;">
     {#    네비게이션 바#}
-<nav class="level">
-    <!-- Left side -->
-    <div class="level-left">
-          <p class="level-item"><a href="javascript:history.go(-1);">HOME</a></p>
-        <div class="level-item">
-            <div class="field has-addons">
-                <p class="control">
-                    <input class="input" type="text" placeholder="Find a person">
-                </p>
-                <p class="control">
-                    <button class="button" onclick="listing()">
-                        Searchs
-                    </button>
-                    <button type="button" class="btn btn-light" onclick="window.location.reload()">검색 초기화</button>
-                </p>
+     <nav class="navbar is-fixed-top is-white" role="navigation" aria-label="main navigation">
+        <!-- Left side -->
+        <div class="level-left">
+            <p class="level-item"><a href="javascript:history.go(-1);">HOME</a></p>
+            <div class="level-item">
+                <div class="field has-addons">
+                    <p class="control">
+                        <input class="input" type="text" placeholder="Find a person">
+                    </p>
+                    <p class="control">
+                        <button class="button" onclick="listing()">
+                            Searchs
+                        </button>
+                        <button type="button" class="btn btn-light" onclick="window.location.reload()">검색 초기화</button>
+                    </p>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- Right side -->
-    <div class="level-right">
-        <p class="level-item"><button class="button is-link is-light" onclick="window.location.href='/posting/{{ user_info.username }}'">글쓰기</button></p>
-        <p class="level-item"><button class="button is-link" onclick="sign_out()">로그아웃</button></p>
-    </div>
-</nav>
-    {#    검색/초기화/글 작성#}
-        <div class="field has-addons">
-            <div class="control">
-                <input class="input" id="input_search" type="text" placeholder="작성자를 검색하세요">
-            </div>
-            <div class="control">
-                <button class="button is-primary" onclick="listing()">
-                    Search
+        <!-- Right side -->
+        <div class="level-right">
+            <p class="level-item">
+                <button class="button is-link is-light"
+                        onclick="window.location.href='/posting/{{ user_info.username }}'">글쓰기
                 </button>
-            </div>
-            <button onclick="window.location.reload()" class="button is-warning">초기화</button>
-            <button class="button is-link" onclick="window.location.href='/posting/{{ user_info.username }}'">
-                글 작성
+            </p>
+            <p class="level-item">
+                <button class="button is-link" onclick="sign_out()">로그아웃</button>
+            </p>
+        </div>
+    </nav>
+    {#    검색/초기화/글 작성#}
+    <div class="field has-addons">
+        <div class="control">
+            <input class="input" id="input_search" type="text" placeholder="작성자를 검색하세요">
+        </div>
+        <div class="control">
+            <button class="button is-primary" onclick="listing()">
+                Search
             </button>
         </div>
+        <button onclick="window.location.reload()" class="button is-warning">초기화</button>
+        <button class="button is-link" onclick="window.location.href='/posting/{{ user_info.username }}'">
+            글 작성
+        </button>
+    </div>
     {#    포스팅정보 불러오기#}
     <div class="post-box">
         <div class="row row-cols-1 row-cols-md-4 g-4" id="post-card"/>
