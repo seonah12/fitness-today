@@ -9,6 +9,9 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+
     <!-- Webpage Title -->
     <title>오늘의 운동</title>
 
@@ -21,22 +24,28 @@
     <!-- Font Awesome CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
+    <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">
+
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        .level-left {
+                .level-left {
             margin-left: 30px;
             margin-top: 10px;
         }
 
+        .level-right {
+            margin-right: 15px;
+            margin-top: 10px;
+        }
+        body {
+    background-color: lightsteelblue;
+    min-height: 100vh;
+		padding-top: 3.25rem;
+}
     </style>
 
     {#    사진 미리보기#}
@@ -117,50 +126,47 @@
 </head>
 
 <body>
-<div>{# style="overflow-x:hidden;">
-
-        네비게이션 바 {#    검색/초기화/로그아웃/글 작성/#}
-
-    <!-- Main container -->
-
-    <nav class="level">
-        <!-- Left side -->
-        <div class="level-left">
-            <div class="level-item">
-                <p class="subtitle is-5">
-                    <strong>오늘의 운동</strong>
+<div style="overflow-x:hidden;">
+    {#    네비게이션 바#}
+<nav class="level">
+    <!-- Left side -->
+    <div class="level-left">
+          <p class="level-item"><a href="javascript:history.go(-1);">HOME</a></p>
+        <div class="level-item">
+            <div class="field has-addons">
+                <p class="control">
+                    <input class="input" type="text" placeholder="Find a person">
+                </p>
+                <p class="control">
+                    <button class="button" onclick="listing()">
+                        Searchs
+                    </button>
+                    <button type="button" class="btn btn-light" onclick="window.location.reload()">검색 초기화</button>
                 </p>
             </div>
         </div>
-
-        <!-- Right side -->
-        <div class="level-right">
-            <p class="level-item">
-                <button class="btn btn-light" onclick="sign_out()">로그아웃</button>
-            </p>
-            <p class="level-item">
-                <button class="button is-link is-light"
-                        onclick="window.location.href='/posting/{{ user_info.username }}'">글 작성
-                </button>
-            </p>
-        </div>
-    </nav>
-    <div class="level-item">
-        <div class="field has-addons">
-            <p class="control">
-                <input class="input" type="text" placeholder="Find a person">
-            </p>
-            <p class="control">
-                <button class="button" onclick="listing()">
-                    검색
-                </button>
-                <button class="button" onclick="window.location.reload()">
-                    초기화
-                </button>
-            </p>
-        </div>
     </div>
-
+    <!-- Right side -->
+    <div class="level-right">
+        <p class="level-item"><button class="button is-link is-light" onclick="window.location.href='/posting/{{ user_info.username }}'">글쓰기</button></p>
+        <p class="level-item"><button class="button is-link" onclick="sign_out()">로그아웃</button></p>
+    </div>
+</nav>
+    {#    검색/초기화/글 작성#}
+        <div class="field has-addons">
+            <div class="control">
+                <input class="input" id="input_search" type="text" placeholder="작성자를 검색하세요">
+            </div>
+            <div class="control">
+                <button class="button is-primary" onclick="listing()">
+                    Search
+                </button>
+            </div>
+            <button onclick="window.location.reload()" class="button is-warning">초기화</button>
+            <button class="button is-link" onclick="window.location.href='/posting/{{ user_info.username }}'">
+                글 작성
+            </button>
+        </div>
     {#    포스팅정보 불러오기#}
     <div class="post-box">
         <div class="row row-cols-1 row-cols-md-4 g-4" id="post-card"/>

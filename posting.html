@@ -22,7 +22,6 @@
     <!-- Font Awesome CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="{{ url_for('static', filename='mystyle.css') }}" rel="stylesheet">
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -100,7 +99,20 @@
             height: 500px;
             margin: auto;
         }
+
+                     .level-left {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+
+        .level-right {
+            margin-right: 15px;
+            margin-top: 10px;
+        }
     </STYLE>
+
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
         // ----- 달력
@@ -112,13 +124,13 @@
             rel="stylesheet"
             href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
     />
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <script>
         $(function () {
             $("#input-datepicker").datepicker({dateFormat: "yy-mm-dd"});
         });
     </script>
+    {#    날짜 선택 달력#}
     <script>
         $.datepicker.setDefaults({
             dateFormat: 'yy-mm-dd',
@@ -136,7 +148,7 @@
             $("#input-datepicker").datepicker();
         });
     </script>
-
+    {#포스팅 정보 db에 저장#}
     <script>
         function posting() {
             let username = $('#input-username').val()
@@ -174,7 +186,7 @@
             });
         }
     </script>
-
+    {#사진 미리보기#}
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -188,10 +200,35 @@
             }
         }
     </script>
+    {#로그아웃#}
+    <script>
+        function sign_out() {
+            $.removeCookie('mytoken', {path: '/'});
+            alert('로그아웃!')
+            window.location.href = "/"
+        }
+    </script>
 
 </head>
+
 <body>
+{#네비게이션 바#}
+<nav class="level">
+    <!-- Left side -->
+    <div class="level-left">
+
+          <p class="level-item"><a href="javascript:history.go(-1);">HOME</a></p>
+    </div>
+    <!-- Right side -->
+    <div class="level-right">
+        <p class="level-item"><button class="button is-link is-light" onclick="window.location.href='/posting/{{ user_info.username }}'">글쓰기</button></p>
+        <p class="level-item"><button class="button is-link" onclick="sign_out()">로그아웃</button></p>
+    </div>
+</nav>
+
+{#포스트 정보 입력#}
 <div class="topimg"></div>
+{#토글에서 유저정보 가져오기#}
 <input type="text" class="is-hidden" value="{{ user_info.username1 }}" id="input-username1">
 <input type="text" class="is-hidden" value="{{ user_info.username }}" id="input-username">
 
@@ -248,8 +285,10 @@
     </div>
     <div class="btn">
         <button onclick="posting()" type="button" class="btn btn-dark">등록</button>
-        <button onclick="window.location.href='/'"  class="btn btn-outline-dark">취소</button>
+        <button onclick="window.location.href='/'" class="btn btn-dark">취소</button>
     </div>
 </div>
+
 </body>
+
 </html>
